@@ -1,0 +1,84 @@
+// Crochet
+start: pattern
+
+pattern: [stitch break] [row | round]+  
+
+row: [NUMBER ORDINAL "row"] [("row" | "Row") NUMBER] [SIDE] [":"] ["Do"] action+ "turn" ["your work"] break [stitch_count]
+
+round: action* "join"
+
+action : (stitch | repeat | group | skip) [break action]
+
+repeat.0: "(" action* ")" [count "times"]
+    | "{" action* "}" [count "times"]
+    | "[" action* "]" [count "times"]
+    | "**" action* "**" [count "times"]
+    | "*" action* "*" [count "times"]
+    | stitch ("into" | "in") [count] [ORDINAL] stitch "sp"
+
+group: stitch "in same place as last" stitch
+    | stitch "in same" stitch
+    | "the following: [" (stitch break)* stitch "]"
+
+skip: stitch ("into" | "in" | "In") ["the"] "next" stitch
+    | stitch "in" ["the"] count ORDINAL stitch ["from hook"]
+    | ("skip" | "sk") stitch
+    | "Skip the"i ("first" | "next") stitch break ["then do"] action
+    | ("in"i | "into"i) ["the"] "next" (stitch | "sp") [break] ["sp"] ("make" | "crochet" | "do") action
+
+break:  "," 
+    | "." 
+    | ";"
+    | "and"
+    | COMMENT break
+
+stitch: [count] stitch_type ["-"] [count] [SUFFIX] [location]
+
+count: NUMBER
+    | "one"
+    | "two"
+    | "three"
+    | "four"
+    | "five"
+    | "six"
+    | "seven"
+    | "eight"
+    | "nine"
+    | "ten"
+
+stitch_count: "(" NUMBER ")"
+
+location: ("on" | "in") WORD
+SIDE: "(RS)" | "(WS)"
+ORDINAL: "st" | "nd" | "rd" | "th"
+
+stitch_type: chain 
+    | slip 
+    | single 
+    | half_double 
+    | double  
+    | half_treble 
+    | treble
+    | stitch_unspec
+    | space
+
+chain: "ch"i
+slip: "sl st" | "sl. st."
+single: "sc"i | "s c"i
+half_double: "hdc"i
+double: "dc"i | "d c"i
+half_treble:  "htr"i
+treble: "tr" | 
+stitch_unspec: "st" | "sts" 
+space: "sp"
+
+SUFFIX: "2tog" | "3tog" | "sp" | "s"
+
+
+COMMENT: /\((.)+?\)\)/
+
+%import common.INT -> NUMBER 
+%import common.LETTER
+%import common.WORD
+%import common.WS
+%ignore WS         
